@@ -20,5 +20,5 @@ networking:
 platform:
   none: {}
 fips: false
-pullSecret: '{{ env.pullSecret }}'
-sshKey: '{{ env.sshKey }}'
+pullSecret: '{{ pullsecret.stdout }}'
+sshKey: '{{ sshkey.stdout }}'

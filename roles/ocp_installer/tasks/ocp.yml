@@ -1,0 +1,96 @@
+---
+- name: install httpd
+  yum:
+    name: httpd
+    state: latest
+
+- name: modify httpd configuration
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: "^Listen"
+    line: "Listen 8080"
+  notify:
+  - restart httpd
+
+- name: check ocp install cli exists
+  stat:
+    path: /usr/local/bin/openshift-install
+  register: install_cli
+
+- name: extract ocp install cli
+  unarchive:
+    src: "{{ env.ocpInstallDir }}"
+    dest: /usr/local/bin/
+  when: install_cli.stat.exists == False
+
+- name: check ocp client cli exists
+  stat:
+    path: /usr/local/bin/oc
+  register: client_cli
+
+- name: extract ocp client cli
+  unarchive:
+    src: "{{ env.ocpClientDir }}"
+    dest: /usr/local/bin/
+  when: client_cli.stat.exists == False
+
+- name: check install dir exists
+  stat:
+    path: /root/ocp4
+  register: install_dir
+
+- name: remove old install dir
+  file:
+    path: /root/ocp4
+    state: absent
+  when: install_dir.stat.exists == True
+
+- name: create install dir
+  file:
+    path: /root/ocp4
+    state: directory
+    mode: 0755
+
+- name: get pull secret value
+  command: "cat {{ env.pullSecretDir }}"
+  register: pullsecret
+
+- name: get ssh key value
+  command: "cat {{ env.sshKeyDir }}"
+  register: sshkey
+
+- name: create install config
+  template:
+    src: install-config.j2
+    dest: /root/ocp4/install-config.yaml
+
+- name: generate manifests
+  command: openshift-install create manifests --dir=/root/ocp4
+
+- name: modify scheduler config
+  lineinfile:
+    path: /root/ocp4/manifests/cluster-scheduler-02-config.yml
+    regexp: "^[\\s]*mastersSchedulable"
+    line: "  mastersSchedulable: false"
+
+- name: generate ignition files
+  command: openshift-install create ignition-configs --dir=/root/ocp4
+
+- name: copy the ignition files
+  copy:
+    src: "{{ item }}"
+    dest: /var/www/html
+  with_fileglob:
+  - "/root/ocp4/*.ign"
+
+- name: copy the raw.gz
+  copy:
+    src: "{{ env.rawfileDir }}"
+    dest: /var/www/html/rhcos.raw.gz
+
+- name: granted read permission for httpd files
+  file:
+    path: /var/www/html
+    state: directory
+    recurse: yes
+    mode: 0644

@@ -1,0 +1,16 @@
+---
+- name: disable firewalld
+  service:
+    name: firewalld
+    state: stopped
+    enabled: false
+
+- name: disable selinux
+  selinux:
+    policy: targeted
+    state: permissive
+
+#- name: configure the dns name server
+#  net_system:
+#    name_servers:
+#    - "{{ nodes.bastion.ip }}"

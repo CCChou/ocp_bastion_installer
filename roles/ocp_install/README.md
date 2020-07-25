@@ -1,38 +1,56 @@
-Role Name
+OCP Install
 =========
 
-A brief description of the role goes here.
+Install the dns, loadbalancer, http server and generate the ignition files automatically
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Ansible 2.6+
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+    # the upper nameserver
+    dns: 168.95.1.1
+    # define the cluster name for cluster
+    clusterName: ibm
+    # define the base domain for cluster
+    baseDomain: cp.example
+    # define the resource files absolute path
+    pullSecretDir: /root/pull-secret.txt
+    sshKeyDir: /root/.ssh/id_rsa.pub
+    rawfileDir: /root/rhcos-4.4.3-x86_64-metal.x86_64.raw.gz
+    ocpInstallDir: /root/openshift-install-linux.tar.gz
+    ocpClientDir: /root/openshift-client-linux.tar.gz
+    # define ip and hostname for all nodes
+    bastion:
+      name: bastion
+      ip: 10.9.42.31
+    bootstrap:
+      name: bootstrap
+      ip: 10.9.42.32
+    master:
+    - name: master0
+      ip: 10.9.42.33
+    - name: master1
+      ip: 10.9.42.34
+    - name: master2
+      ip: 10.9.42.35
+    worker:
+    - name: infra
+      ip: 10.9.42.36
+    - name: worker
+      ip: 10.9.42.37
 
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    - hosts: bastion
+      var_files:
+      - env.yml
       roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+      - ocp_install

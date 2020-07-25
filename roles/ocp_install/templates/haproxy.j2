@@ -88,8 +88,8 @@ backend app
 backend openshift-api-server
     balance source
     mode tcp
-    server {{ nodes.bootstrap.name }} {{ nodes.bootstrap.ip }}:6443 check
-    {% for node in nodes.master %}
+    server {{ bootstrap.name }} {{ bootstrap.ip }}:6443 check
+    {% for node in master %}
 server {{ node.name }} {{ node.ip }}:6443 check
     {% endfor %}
 
@@ -102,8 +102,8 @@ frontend machine-config-server
 backend machine-config-server
     balance source
     mode tcp
-    server {{ nodes.bootstrap.name }} {{ nodes.bootstrap.ip }}:22623 check
-    {% for node in nodes.master %}
+    server {{ bootstrap.name }} {{ bootstrap.ip }}:22623 check
+    {% for node in master %}
 server {{ node.name }} {{ node.ip }}:22623 check
     {% endfor %}
 
@@ -116,7 +116,7 @@ frontend ingress-http
 backend ingress-http
     balance source
     mode tcp
-    {% for node in nodes.worker %}
+    {% for node in worker %}
 server {{ node.name }} {{ node.ip }}:80 check
     {% endfor %}
     
@@ -129,6 +129,6 @@ frontend ingress-https
 backend ingress-https
     balance source
     mode tcp
-    {% for node in nodes.worker %}
+    {% for node in worker %}
 server {{ node.name }} {{ node.ip }}:443 check
     {% endfor %}

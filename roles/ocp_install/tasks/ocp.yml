@@ -19,7 +19,7 @@
 
 - name: extract ocp install cli
   unarchive:
-    src: "{{ env.ocpInstallDir }}"
+    src: "{{ ocpInstallDir }}"
     dest: /usr/local/bin/
   when: install_cli.stat.exists == False
 
@@ -30,7 +30,7 @@
 
 - name: extract ocp client cli
   unarchive:
-    src: "{{ env.ocpClientDir }}"
+    src: "{{ ocpClientDir }}"
     dest: /usr/local/bin/
   when: client_cli.stat.exists == False
 
@@ -52,11 +52,11 @@
     mode: 0755
 
 - name: get pull secret value
-  command: "cat {{ env.pullSecretDir }}"
+  command: "cat {{ pullSecretDir }}"
   register: pullsecret
 
 - name: get ssh key value
-  command: "cat {{ env.sshKeyDir }}"
+  command: "cat {{ sshKeyDir }}"
   register: sshkey
 
 - name: create install config
@@ -85,7 +85,7 @@
 
 - name: copy the raw.gz
   copy:
-    src: "{{ env.rawfileDir }}"
+    src: "{{ rawfileDir }}"
     dest: /var/www/html/rhcos.raw.gz
 
 - name: granted read permission for httpd files

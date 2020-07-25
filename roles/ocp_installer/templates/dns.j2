@@ -1,0 +1,34 @@
+server={{ env.dns }}
+
+host-record={{ nodes.bastion.name }}.{{ env.clusterName }}.{{ env.baseDomain }},{{ nodes.bastion.ip }}
+host-record={{ nodes.bootstrap.name }}.{{ env.clusterName }}.{{ env.baseDomain }},{{ nodes.bootstrap.ip }}
+{% for node in nodes.master %}
+host-record={{ node.name }}.{{ env.clusterName }}.{{ env.baseDomain }},{{ node.ip }}
+{% endfor %}
+{% for node in nodes.worker %}
+host-record={{ node.name }}.{{ env.clusterName }}.{{ env.baseDomain }},{{ node.ip }}
+{% endfor %}
+{% for node in nodes.master %}
+host-record=etcd-{{ loop.index - 1 }}.{{ env.clusterName }}.{{ env.baseDomain }},{{ node.ip }}
+{% endfor %}
+{% for node in nodes.master %}
+srv-host=_etcd-server-ssl._tcp.ibm.cp.example,etcd-{{ loop.index - 1 }}.{{ env.clusterName }}.{{ env.baseDomain }},2380,0,10
+{% endfor %}
+host-record=api.{{ env.clusterName }}.{{ env.baseDomain }},{{ nodes.bastion.ip }}
+host-record=api-int.{{ env.clusterName }}.{{ env.baseDomain }},{{ nodes.bastion.ip }}
+
+address=/{{ nodes.bastion.name }}.{{ env.clusterName }}.{{ env.baseDomain }}/{{ nodes.bastion.ip }}
+address=/{{ nodes.bootstrap.name }}.{{ env.clusterName }}.{{ env.baseDomain }}/{{ nodes.bootstrap.ip }}
+{% for node in nodes.master %}
+address=/{{ node.name }}.{{ env.clusterName }}.{{ env.baseDomain }}/{{ node.ip }}
+{% endfor %}
+{% for node in nodes.worker %}
+address=/{{ node.name }}.{{ env.clusterName }}.{{ env.baseDomain }}/{{ node.ip }}
+{% endfor %}
+address=/apps.{{ env.clusterName }}.{{ env.baseDomain }}/{{ nodes.bastion.ip }}
+address=/.apps.{{ env.clusterName }}.{{ env.baseDomain }}/{{ nodes.bastion.ip }}
+address=/api.{{ env.clusterName }}.{{ env.baseDomain }}/{{ nodes.bastion.ip }}
+address=/api-int.{{ env.clusterName }}.{{ env.baseDomain }}/{{ nodes.bastion.ip }}
+{% for node in nodes.master %}
+address=/etcd-{{ loop.index - 1 }}.{{ env.clusterName }}.{{ env.baseDomain }}/{{ node.ip }}
+{% endfor %}

@@ -13,16 +13,20 @@ Role Variables
 
     # the upper nameserver
     dns: 168.95.1.1
+    
     # define the cluster name for cluster
     clusterName: ibm
+    
     # define the base domain for cluster
     baseDomain: cp.example
+
     # define the resource files absolute path
     pullSecretDir: /root/pull-secret.txt
     sshKeyDir: /root/.ssh/id_rsa.pub
     rawfileDir: /root/rhcos-4.4.3-x86_64-metal.x86_64.raw.gz
     ocpInstallDir: /root/openshift-install-linux.tar.gz
     ocpClientDir: /root/openshift-client-linux.tar.gz
+    
     # define ip and hostname for all nodes
     bastion:
       name: bastion

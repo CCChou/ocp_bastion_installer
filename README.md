@@ -6,7 +6,8 @@ for simple prepare tasks
 - http server install
 - generate ignition files
 
-Deprecated.
+---
+**Deprecated**
 
 Because of the official has a project that can handle the tasks
 - https://github.com/RedHatOfficial/ocp4-vsphere-upi-automation

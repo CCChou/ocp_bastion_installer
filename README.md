@@ -1,13 +1,15 @@
 # OCP Install preparation with Ansible
 
-for simple prepare tasks
+## Goal
+For Bastion Node Prerequisite Setup.
+
+This role will do the following tasks
 - dns install
 - load balance install
 - http server install
 - generate ignition files
 
----
-**Deprecated**
+## Advanced
 
-Because of the official has a project that can handle the tasks
+For install the whole OpenShift Cluster automatically, you can use the following project
 - https://github.com/RedHatOfficial/ocp4-vsphere-upi-automation

@@ -1,4 +1,4 @@
-OCP Install
+OpenShift Bastion Node Installer
 =========
 
 Install the dns, loadbalancer, http server and generate the ignition files automatically
@@ -57,4 +57,4 @@ Including an example of how to use your role (for instance, with variables passe
       vars_files:
       - env.yml
       roles:
-      - ocp_install
+      - ocp_bastion_installer

@@ -1,4 +1,4 @@
-# OCP Install preparation with Ansible
+# ocp_bastion_installer
 
 ## Goal
 For Bastion Node Prerequisite Setup.

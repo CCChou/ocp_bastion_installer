@@ -10,6 +10,11 @@ Ansible 2.6+
 
 Role Variables
 --------------
+    # enable or disable
+    firewalld_enable: true
+    selinux_enable: true
+    dns_configure: true
+    haproxy_configure: true
 
     # the upper nameserver
     dns: 168.95.1.1

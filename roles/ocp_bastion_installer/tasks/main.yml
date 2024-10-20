@@ -1,5 +1,19 @@
 ---
-- include_tasks: prepare.yml
-- include_tasks: dns.yml
-- include_tasks: haproxy.yml
-- include_tasks: ocp.yml
+- name: "disable firewalld"
+  import_tasks: firewalld.yaml
+  when: firewalld_enable 
+
+- name: "disable selinux"
+  import_tasks: selinux.yaml
+  when: firewalld_enable 
+
+- name: "setup dns"
+  import_tasks: dns.yaml
+  when: dns_enable 
+
+- name: "setup haproxy"
+  import_tasks: haproxy.yaml
+  when: haproxy_enable 
+
+- name: "setup ocp files"
+  import_tasks: ocp.yaml

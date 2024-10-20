@@ -5,15 +5,15 @@
 
 - name: "disable selinux"
   import_tasks: selinux.yml
-  when: firewalld_enable 
+  when: selinux_enable 
 
 - name: "setup dns"
   import_tasks: dns.yml
-  when: dns_enable 
+  when: dns_configure 
 
 - name: "setup haproxy"
   import_tasks: haproxy.yml
-  when: haproxy_enable 
+  when: haproxy_configure 
 
 - name: "setup ocp files"
   import_tasks: ocp.yml

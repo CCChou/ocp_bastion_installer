@@ -83,11 +83,6 @@
   with_fileglob:
   - "/root/ocp4/*.ign"
 
-- name: copy the raw.gz
-  copy:
-    src: "{{ rawfileDir }}"
-    dest: /var/www/html/rhcos.raw.gz
-
 - name: granted read permission for httpd files
   file:
     path: /var/www/html

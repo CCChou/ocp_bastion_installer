@@ -1,19 +1,19 @@
 ---
 # handlers file for ocp_installer
 - name: restart dns
-  service:
+  ansible.builtin.service:
     name: dnsmasq
     state: restarted
     enabled: true
 
 - name: restart haproxy
-  service:
+  ansible.builtin.service:
     name: haproxy
     state: restarted
     enabled: true
 
 - name: restart httpd
-  service:
+  ansible.builtin.service:
     name: httpd
     state: restarted
     enabled: true

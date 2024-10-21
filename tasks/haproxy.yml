@@ -1,11 +1,11 @@
 ---
 - name: install haproxy
-  yum:
+  ansible.builtin.yum:
     name: haproxy
     state: latest
 
 - name: modify haproxy configuration
-  template:
+  ansible.builtin.template:
     src: haproxy.j2
     dest: /etc/haproxy/haproxy.cfg
   notify:

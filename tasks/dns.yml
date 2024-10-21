@@ -1,11 +1,11 @@
 ---
 - name: install dns
-  yum:
+  ansible.builtin.yum:
     name: dnsmasq
     state: latest
 
 - name: modify dns configuration
-  template:
+  ansible.builtin.template:
     src: dns.j2
     dest: /etc/dnsmasq.d/dns.conf
   notify:

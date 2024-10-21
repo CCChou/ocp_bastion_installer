@@ -1,11 +1,11 @@
 ---
 - name: install httpd
-  yum:
+  ansible.builtin.yum:
     name: httpd
     state: latest
 
 - name: modify httpd configuration
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/httpd/conf/httpd.conf
     regexp: "^Listen"
     line: "Listen 8080"
@@ -13,78 +13,78 @@
   - restart httpd
 
 - name: check ocp install cli exists
-  stat:
+  ansible.builtin.stat:
     path: /usr/local/bin/openshift-install
   register: install_cli
 
 - name: extract ocp install cli
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ ocpInstallDir }}"
     dest: /usr/local/bin/
   when: install_cli.stat.exists == False
 
 - name: check ocp client cli exists
-  stat:
+  ansible.builtin.stat:
     path: /usr/local/bin/oc
   register: client_cli
 
 - name: extract ocp client cli
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ ocpClientDir }}"
     dest: /usr/local/bin/
   when: client_cli.stat.exists == False
 
 - name: check install dir exists
-  stat:
+  ansible.builtin.stat:
     path: /root/ocp4
   register: install_dir
 
 - name: remove old install dir
-  file:
+  ansible.builtin.file:
     path: /root/ocp4
     state: absent
   when: install_dir.stat.exists == True
 
 - name: create install dir
-  file:
+  ansible.builtin.file:
     path: /root/ocp4
     state: directory
     mode: 0755
 
 - name: get pull secret value
-  command: "cat {{ pullSecretDir }}"
+  ansible.builtin.command: "cat {{ pullSecretDir }}"
   register: pullsecret
 
 - name: get ssh key value
-  command: "cat {{ sshKeyDir }}"
+  ansible.builtin.command: "cat {{ sshKeyDir }}"
   register: sshkey
 
 - name: create install config
-  template:
+  ansible.builtin.template:
     src: install-config.j2
     dest: /root/ocp4/install-config.yaml
 
 - name: generate manifests
-  command: openshift-install create manifests --dir=/root/ocp4
+  ansible.builtin.command: openshift-install create manifests --dir=/root/ocp4
 
 - name: modify scheduler config
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /root/ocp4/manifests/cluster-scheduler-02-config.yml
     regexp: "^[\\s]*mastersSchedulable"
     line: "  mastersSchedulable: false"
 
 - name: generate ignition files
-  command: openshift-install create ignition-configs --dir=/root/ocp4
+  ansible.builtin.command: openshift-install create ignition-configs --dir=/root/ocp4
 
 - name: copy the ignition files
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: /var/www/html
   with_fileglob:
   - "/root/ocp4/*.ign"
 
 - name: granted read permission for httpd files
-  file:
+  ansible.builtin.file:
     path: /var/www/html
     state: directory
     recurse: yes

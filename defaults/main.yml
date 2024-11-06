@@ -1,13 +1,27 @@
 ---
-# defaults file for ocp_installer
-dns: 168.95.1.1
-clusterName: ibm
-baseDomain: cp.example
+firewalld_disable: false
+selinux_disable: true
+
+# DNS
+dns_configure: true
+dns_upstream: 168.95.1.1
+
+# LB
+haproxy_configure: true
+
+# Registry
+registry_configure: true
+mirrorRegistryDir: /root/mirror-registry-amd64.tar.gz
+
+# OCP
+clusterName: ocp4
+baseDomain: rhtw.com
 pullSecretDir: /root/pull-secret.txt
 sshKeyDir: /root/.ssh/id_rsa.pub 
-rawfileDir: /root/rhcos-4.4.3-x86_64-metal.x86_64.raw.gz
 ocpInstallDir: /root/openshift-install-linux.tar.gz
 ocpClientDir: /root/openshift-client-linux.tar.gz
+
+# Nodes
 bastion:
   name: bastion
   ip: 10.9.42.31
@@ -15,14 +29,14 @@ bootstrap:
   name: bootstrap
   ip: 10.9.42.32
 master:
-- name: master0
+- name: master01
   ip: 10.9.42.33
-- name: master1
+- name: master02
   ip: 10.9.42.34
-- name: master2
+- name: master03
   ip: 10.9.42.35
 worker: 
-- name: infra
+- name: worker01
   ip: 10.9.42.36
-- name: worker
+- name: worker02
   ip: 10.9.42.37

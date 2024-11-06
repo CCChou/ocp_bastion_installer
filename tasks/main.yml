@@ -1,19 +1,31 @@
 ---
+# - name: "install kvm"
+
 - name: "disable firewalld"
   include_tasks: firewalld.yml
-  when: firewalld_enable 
+  when: firewalld_disable 
 
 - name: "disable selinux"
   include_tasks: selinux.yml
-  when: selinux_enable 
+  when: selinux_disable 
+
+- name: "setup haproxy"
+  include_tasks: haproxy.yml
+  when: haproxy_configure 
+
+# - name: "check lb settings"
 
 - name: "setup dns"
   include_tasks: dns.yml
   when: dns_configure 
 
-- name: "setup haproxy"
-  include_tasks: haproxy.yml
-  when: haproxy_configure 
+# - name: "check dns settings"
+
+- name: "setup mirror registry"
+  include_tasks: mirror-registry.yml
+  when: registry_configure 
+
+# - name: "import ocp images to mirror registry"
 
 - name: "setup ocp files"
   include_tasks: ocp.yml

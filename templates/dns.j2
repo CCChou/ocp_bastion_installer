@@ -1,4 +1,4 @@
-server={{ dns }}
+server={{ dns_upstream }}
 
 host-record={{ bastion.name }}.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 host-record={{ bootstrap.name }}.{{ clusterName }}.{{ baseDomain }},{{ bootstrap.ip }}

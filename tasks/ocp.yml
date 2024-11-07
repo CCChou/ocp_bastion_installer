@@ -1,10 +1,10 @@
 ---
-- name: "install httpd"
+- name: Install httpd
   ansible.builtin.yum:
     name: httpd
     state: latest
 
-- name: "modify httpd configuration"
+- name: Modify httpd configuration
   ansible.builtin.lineinfile:
     path: /etc/httpd/conf/httpd.conf
     regexp: "^Listen"
@@ -12,78 +12,78 @@
   notify:
   - restart httpd
 
-- name: "check ocp install cli exists"
+- name: Check ocp install cli exists
   ansible.builtin.stat:
     path: /usr/local/bin/openshift-install
   register: install_cli
 
-- name: "extract ocp install cli"
+- name: Extract ocp install cli
   ansible.builtin.unarchive:
     src: "{{ ocpInstallDir }}"
     dest: /usr/local/bin/
   when: install_cli.stat.exists == False
 
-- name: "check ocp client cli exists"
+- name: Check ocp client cli exists
   ansible.builtin.stat:
     path: /usr/local/bin/oc
   register: client_cli
 
-- name: "extract ocp client cli"
+- name: Extract ocp client cli
   ansible.builtin.unarchive:
     src: "{{ ocpClientDir }}"
     dest: /usr/local/bin/
   when: client_cli.stat.exists == False
 
-- name: "check install dir exists"
+- name: Check install dir exists
   ansible.builtin.stat:
     path: /root/ocp4
   register: install_dir
 
-- name: "remove old install dir"
+- name: Remove old install dir
   ansible.builtin.file:
     path: /root/ocp4
     state: absent
   when: install_dir.stat.exists == True
 
-- name: "create install dir"
+- name: Create install dir
   ansible.builtin.file:
     path: /root/ocp4
     state: directory
     mode: 0755
 
-- name: "get pull secret value"
+- name: Get pull secret value
   ansible.builtin.command: "cat {{ pullSecretDir }}"
   register: pullsecret
 
-- name: "get ssh key value"
+- name: Get ssh key value
   ansible.builtin.command: "cat {{ sshKeyDir }}"
   register: sshkey
 
-- name: "create install config"
+- name: Create install config
   ansible.builtin.template:
     src: install-config.j2
     dest: /root/ocp4/install-config.yaml
 
-- name: "generate manifests"
+- name: Generate manifests
   ansible.builtin.command: openshift-install create manifests --dir=/root/ocp4
 
-- name: "modify scheduler config"
+- name: Modify scheduler config
   ansible.builtin.lineinfile:
     path: /root/ocp4/manifests/cluster-scheduler-02-config.yml
     regexp: "^[\\s]*mastersSchedulable"
     line: "  mastersSchedulable: false"
 
-- name: "generate ignition files"
+- name: Generate ignition files
   ansible.builtin.command: openshift-install create ignition-configs --dir=/root/ocp4
 
-- name: "copy the ignition files"
+- name: Copy the ignition files
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: /var/www/html
   with_fileglob:
   - "/root/ocp4/*.ign"
 
-- name: "granted read permission for httpd files"
+- name: Granted read permission for httpd files
   ansible.builtin.file:
     path: /var/www/html
     state: directory

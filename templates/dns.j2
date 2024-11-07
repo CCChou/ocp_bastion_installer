@@ -11,9 +11,6 @@ host-record={{ node.name }}.{{ clusterName }}.{{ baseDomain }},{{ node.ip }}
 {% for node in master %}
 host-record=etcd-{{ loop.index - 1 }}.{{ clusterName }}.{{ baseDomain }},{{ node.ip }}
 {% endfor %}
-{% for node in master %}
-srv-host=_etcd-server-ssl._tcp.ibm.cp.example,etcd-{{ loop.index - 1 }}.{{ clusterName }}.{{ baseDomain }},2380,0,10
-{% endfor %}
 host-record=api.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 host-record=api-int.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 

@@ -1,21 +1,19 @@
 ---
-- hosts: localhost
-  tasks:
-  - name: "install podman"
-    ansible.builtin.yum:
-      name: podman
-      state: present
+- name: "install podman"
+  ansible.builtin.yum:
+    name: podman
+    state: present
 
-  - name: "tar"
-    ansible.builtin.unarchive:
-      src: "{{ mirrorRegistryDir }}"
-      dest: "."
-      mode: "u+x"
+- name: "unarchive mirror registry"
+  ansible.builtin.unarchive:
+    src: "{{ mirrorRegistryDir }}"
+    dest: "."
+    mode: "u+x"
 
-  - name: "install"
-    ansible.builtin.command: "./mirror-registry install --quayHostname {{ bastion.name }} --quayRoot ~/images"
-    register: registryResult
-  
-  - name: "print"
-    ansible.builtin.debug: 
-      var: registryResult
+- name: " install mirror registry"
+  ansible.builtin.command: "./mirror-registry install --quayHostname {{ bastion.name }} --quayRoot ~/images"
+  register: registryResult
+
+- name: "print result"
+  ansible.builtin.debug: 
+    var: registryResult

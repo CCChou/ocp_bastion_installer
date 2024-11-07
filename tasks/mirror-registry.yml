@@ -10,7 +10,7 @@
     dest: "."
     mode: "u+x"
 
-- name: " install mirror registry"
+- name: "install mirror registry"
   ansible.builtin.command: "./mirror-registry install --quayHostname {{ bastion.name }} --quayRoot ~/images"
   register: registryResult
 

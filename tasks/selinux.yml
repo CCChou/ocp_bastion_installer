@@ -1,4 +1,4 @@
-- name: disable selinux
-  ansible.builtin.selinux:
+- name: "disable selinux"
+  ansible.posix.selinux:
     policy: targeted
     state: permissive

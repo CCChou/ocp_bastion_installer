@@ -8,9 +8,6 @@ host-record={{ node.name }}.{{ clusterName }}.{{ baseDomain }},{{ node.ip }}
 {% for node in worker %}
 host-record={{ node.name }}.{{ clusterName }}.{{ baseDomain }},{{ node.ip }}
 {% endfor %}
-{% for node in master %}
-host-record=etcd-{{ loop.index - 1 }}.{{ clusterName }}.{{ baseDomain }},{{ node.ip }}
-{% endfor %}
 host-record=api.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 host-record=api-int.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 

@@ -5,7 +5,7 @@
     state: present
 
 - name: Check mirror registry installed or not
-  community.general.wait_for:
+  ansible.builtin.wait_for:
     host: 127.0.0.1
     port: 8443
     timeout: 10

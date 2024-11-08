@@ -11,4 +11,7 @@
   notify:
   - restart dns
 
+- name: Force DNS service restart for DNS check tasks
+  ansible.builtin.meta: flush_handlers
+
 # - name: Update nic dns setting

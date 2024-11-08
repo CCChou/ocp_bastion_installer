@@ -9,8 +9,6 @@
     path: /etc/httpd/conf/httpd.conf
     regexp: "^Listen"
     line: "Listen 8080"
-  notify:
-  - restart httpd
 
 - name: Check ocp install cli exists
   ansible.builtin.stat:
@@ -89,3 +87,5 @@
     state: directory
     recurse: yes
     mode: 0644
+  notify:
+  - restart httpd

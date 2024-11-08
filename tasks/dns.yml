@@ -10,3 +10,5 @@
     dest: /etc/dnsmasq.d/dns.conf
   notify:
   - restart dns
+
+# - name: Update nic dns setting

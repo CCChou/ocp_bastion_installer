@@ -4,16 +4,32 @@
     name: podman
     state: present
 
+- name: Check mirror registry installed or not
+  community.general.wait_for:
+    host: 127.0.0.1
+    port: 8443
+    timeout: 10
+  register: result
+  ignore_errors: true
+
+- name: Print message
+  ansible.builtin.debug:
+    msg: "Mirror Registry already installed or port is already used by other service"
+  when: result.failed
+
 - name: Unarchive mirror registry
   ansible.builtin.unarchive:
     src: "{{ mirrorRegistryDir }}"
     dest: "."
     mode: "u+x"
+  when: result.failed
 
 - name: Install mirror registry
   ansible.builtin.command: "./mirror-registry install --quayHostname {{ bastion.name }} --quayRoot ~/images"
   register: registryResult
+  when: result.failed
 
 - name: Print result
   ansible.builtin.debug: 
     var: registryResult
+  when: result.failed

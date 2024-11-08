@@ -1,0 +1,51 @@
+- name: Check bastion record
+  ansible.builtin.debug:
+    msg: "{{ lookup('community.general.dig', '{{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}')}}"
+  register: bastion_records
+
+- name: Check bootstrap record
+  ansible.builtin.debug:
+    msg: "{{ lookup('community.general.dig', '{{ bootstrap.name }}.{{ clusterName }}.{{ baseDomain }}')}}"
+  register: bootstrap_records
+
+- name: Check master record
+  ansible.builtin.debug:
+    msg: "{{ lookup('community.general.dig', '{{ item.name }}.{{ clusterName }}.{{ baseDomain }}')}}"
+  loop: "{{ master }}"
+  register: master_records
+
+- name: Check worker record
+  ansible.builtin.debug:
+    msg: "{{ lookup('community.general.dig', '{{ item.name }}.{{ clusterName }}.{{ baseDomain }}')}}"
+  loop: "{{ worker }}"
+  register: worker_records
+
+- name: Print all records
+  ansible.builtin.debug:
+    msg: 
+    - "{{ bastion_records }}"
+    - "{{ bootstrap_records }}"
+    - "{{ master_records }}"
+    - "{{ worker_records }}"
+
+- name: Fail if bastion record incorrect
+  ansible.builtin.fail:
+    msg: "Incorrect records"
+  when: bastion.ip != bastion_records.msg
+
+- name: Fail if bootstrap record incorrect
+  ansible.builtin.fail:
+    msg: "Incorrect records"
+  when: bootstrap.ip != bootstrap_records.msg
+
+- name: Fail if master record incorrect
+  ansible.builtin.fail:
+    msg: "Incorrect records"
+  loop: "{{ master_records.results }}"
+  when: item.item.ip != item.msg
+
+- name: Fail if worker record incorrect
+  ansible.builtin.fail:
+    msg: "Incorrect records"
+  loop: "{{ worker_records.results }}"
+  when: item.item.ip != item.msg

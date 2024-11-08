@@ -9,17 +9,19 @@
   include_tasks: selinux.yml
   when: selinux_disable 
 
+- name: Setup DNS
+  include_tasks: dns.yml
+  when: dns_configure 
+
+- name: Check DNS records
+  include_tasks: dnscheck.yml
+  when: dns_check
+
 - name: Setup loadbalancer
   include_tasks: haproxy.yml
   when: haproxy_configure 
 
 # - name: "check lb settings"
-
-- name: Setup DNS
-  include_tasks: dns.yml
-  when: dns_configure 
-
-# - name: "check dns settings"
 
 - name: Setup mirror registry
   include_tasks: mirror-registry.yml

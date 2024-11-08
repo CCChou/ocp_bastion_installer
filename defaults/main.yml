@@ -5,6 +5,7 @@ selinux_disable: true
 # DNS
 dns_configure: true
 dns_upstream: 168.95.1.1
+dns_check: true
 
 # LB
 haproxy_configure: true

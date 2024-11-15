@@ -25,6 +25,6 @@
   when: result.failed
 
 - name: Install mirror registry
-  ansible.builtin.command: "./mirror-registry install --quayHostname {{ bastion.name }}.{{ clusterName }}.{{ baseDomain }} --quayRoot ~/mirror --initPassword redhat"
+  ansible.builtin.command: "./mirror-registry install --quayHostname {{ bastion.name }}.{{ clusterName }}.{{ baseDomain }} --quayRoot ~/mirror --initPassword {{ registryPassword }}"
   register: registryResult
   when: result.failed

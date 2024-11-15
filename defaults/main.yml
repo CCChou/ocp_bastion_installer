@@ -13,6 +13,7 @@ haproxy_configure: true
 # Registry
 registry_configure: true
 mirrorRegistryDir: /root/mirror-registry-amd64.tar.gz
+registryPassword: P@ssw0rd
 
 # OCP
 clusterName: ocp4

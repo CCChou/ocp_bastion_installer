@@ -1,28 +1,40 @@
-server={{ dns_upstream }}
+#server={{ dns_upstream }}
 
 host-record={{ bastion.name }}.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 host-record={{ bootstrap.name }}.{{ clusterName }}.{{ baseDomain }},{{ bootstrap.ip }}
 {% for node in master %}
 host-record={{ node.name }}.{{ clusterName }}.{{ baseDomain }},{{ node.ip }}
 {% endfor %}
+{% if infra is defined %}
+{% for node in infra %}
+host-record={{ node.name }}.{{ clusterName }}.{{ baseDomain }},{{ node.ip }}
+{% endfor %}
+{% endif %}
 {% for node in worker %}
 host-record={{ node.name }}.{{ clusterName }}.{{ baseDomain }},{{ node.ip }}
 {% endfor %}
+
 host-record=api.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 host-record=api-int.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
+host-record=apps.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
+host-record=.apps.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 
-address=/{{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}/{{ bastion.ip }}
-address=/{{ bootstrap.name }}.{{ clusterName }}.{{ baseDomain }}/{{ bootstrap.ip }}
+#address=/{{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}/{{ bastion.ip }}
+#address=/{{ bootstrap.name }}.{{ clusterName }}.{{ baseDomain }}/{{ bootstrap.ip }}
 {% for node in master %}
-address=/{{ node.name }}.{{ clusterName }}.{{ baseDomain }}/{{ node.ip }}
+#address=/{{ node.name }}.{{ clusterName }}.{{ baseDomain }}/{{ node.ip }}
 {% endfor %}
+{% if infra is defined %}
+{% for node in infra %}
+#address=/{{ node.name }}.{{ clusterName }}.{{ baseDomain }}/{{ node.ip }}
+{% endfor %}
+{% endif %}
 {% for node in worker %}
-address=/{{ node.name }}.{{ clusterName }}.{{ baseDomain }}/{{ node.ip }}
+#address=/{{ node.name }}.{{ clusterName }}.{{ baseDomain }}/{{ node.ip }}
 {% endfor %}
-address=/apps.{{ clusterName }}.{{ baseDomain }}/{{ bastion.ip }}
+
+#address=/*.apps.{{ clusterName }}.{{ baseDomain }}/{{ bastion.ip }}
 address=/.apps.{{ clusterName }}.{{ baseDomain }}/{{ bastion.ip }}
 address=/api.{{ clusterName }}.{{ baseDomain }}/{{ bastion.ip }}
 address=/api-int.{{ clusterName }}.{{ baseDomain }}/{{ bastion.ip }}
-{% for node in master %}
-address=/etcd-{{ loop.index - 1 }}.{{ clusterName }}.{{ baseDomain }}/{{ node.ip }}
-{% endfor %}
+

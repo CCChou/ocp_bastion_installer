@@ -14,6 +14,12 @@
   loop: "{{ master }}"
   register: master_records
 
+- name: Check master record
+  ansible.builtin.debug:
+    msg: "{{ lookup('community.general.dig', '{{ item.name }}.{{ clusterName }}.{{ baseDomain }}', '@{{ dns_ip }}') }}"
+  loop: "{{ master }}"
+  register: master_records
+
 - name: Check worker record
   ansible.builtin.debug:
     msg: "{{ lookup('community.general.dig', '{{ item.name }}.{{ clusterName }}.{{ baseDomain }}', '@{{ dns_ip }}') }}"

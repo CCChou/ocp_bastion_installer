@@ -6,6 +6,11 @@
     state: restarted
     enabled: true
 
+- name: restart NetworkManager
+  ansible.builtin.service:
+    name: NetworkManager
+    state: restarted
+
 - name: restart haproxy
   ansible.builtin.service:
     name: haproxy

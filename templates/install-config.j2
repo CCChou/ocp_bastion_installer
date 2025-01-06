@@ -20,5 +20,19 @@ networking:
 platform:
   none: {}
 fips: false
+{% if online == false  %}
+pullSecret: '{"auths":{"{{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}":{"auth":"{{ ('init:'+registryPassword) | b64encode }}"}}}'
+sshKey: '{{ sshkey.stdout }}'
+additionalTrustBundle: |
+{{ (mirrorRegistryCA['content'] | b64decode) | indent(width=2,first=True) }}
+imageContentSources:
+- mirrors:
+  - {{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}:8443/{{ reponame }}/release
+  source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+- mirrors:
+  - {{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}:8443/{{ reponame }}/release-images
+  source: quay.io/openshift-release-dev/ocp-release
+{% else%}
 pullSecret: '{{ pullsecret.stdout }}'
 sshKey: '{{ sshkey.stdout }}'
+{% endif %}

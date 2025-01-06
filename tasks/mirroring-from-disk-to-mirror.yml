@@ -1,0 +1,18 @@
+---
+#https://docs.openshift.com/container-platform/4.16/installing/disconnected_install/installing-mirroring-disconnected.html#mirroring-image-set-full
+#oc-mirror --from ./mirror_seq1_000000.tar docker://quay.ocp.exmple.com:8443/ocp416
+- name: Unarchive oc mirror 
+  ansible.builtin.unarchive:
+    src: "{{ ocmirrorSource }}"
+    dest: /usr/bin
+    mode: "u+x"
+
+- name: Login
+  ansible.builtin.command:
+    cmd: podman login {{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}:8443 -uinit -p{{ registryPassword }}
+
+
+- name: Mirroing from disk to mirror
+  ansible.builtin.command:
+    cmd: oc-mirror --from {{ imageSetFile }} docker://{{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}:8443/{{ reponame }}
+

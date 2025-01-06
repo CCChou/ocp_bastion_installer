@@ -4,6 +4,11 @@
     name: httpd
     state: latest
 
+- name: Install net-tools
+  ansible.builtin.yum:
+    name: net-tools
+    state: latest
+
 - name: Modify httpd configuration
   ansible.builtin.lineinfile:
     path: /etc/httpd/conf/httpd.conf
@@ -12,24 +17,40 @@
 
 - name: Check ocp install cli exists
   ansible.builtin.stat:
-    path: /usr/local/bin/openshift-install
+    path: /usr/bin/openshift-install
   register: install_cli
 
 - name: Extract ocp install cli
   ansible.builtin.unarchive:
     src: "{{ ocpInstallDir }}"
-    dest: /usr/local/bin/
+    dest: /usr/bin/
+    list_files: true
+  register: unarchive_install_cli
   when: install_cli.stat.exists == False
+
+- name: Move unarchive_install_cli file to openshift-install
+  when: install_cli.stat.exists == False and unarchive_install_cli.files != 'openshift-install'
+  block:
+    - name: Copy file to openshift-install
+      ansible.builtin.copy:
+        remote_src: true
+        src: /usr/bin/{{ unarchive_install_cli.files[0]}}
+        dest: /usr/bin/openshift-install
+        mode: preserve
+    - name: Remove file
+      ansible.builtin.file:
+        path: /usr/bin/{{ unarchive_install_cli.files[0]}}
+        state: absent
 
 - name: Check ocp client cli exists
   ansible.builtin.stat:
-    path: /usr/local/bin/oc
+    path: /usr/bin/oc
   register: client_cli
 
 - name: Extract ocp client cli
   ansible.builtin.unarchive:
     src: "{{ ocpClientDir }}"
-    dest: /usr/local/bin/
+    dest: /usr/bin/
   when: client_cli.stat.exists == False
 
 - name: Check install dir exists
@@ -52,15 +73,27 @@
 - name: Get pull secret value
   ansible.builtin.command: "cat {{ pullSecretDir }}"
   register: pullsecret
+  when: online
 
 - name: Get ssh key value
   ansible.builtin.command: "cat {{ sshKeyDir }}"
   register: sshkey
 
+- name: Get CA value
+  ansible.builtin.slurp:
+    src: "{{ quayRoot }}/quay-rootCA/rootCA.pem"
+  register: mirrorRegistryCA
+  when: not online 
+
 - name: Create install config
   ansible.builtin.template:
     src: install-config.j2
     dest: /root/ocp4/install-config.yaml
+
+- name: Copy install dir
+  ansible.builtin.copy:
+    src: /root/ocp4/
+    dest: /root/ocp4-install
 
 - name: Generate manifests
   ansible.builtin.command: openshift-install create manifests --dir=/root/ocp4
@@ -81,11 +114,20 @@
   with_fileglob:
   - "/root/ocp4/*.ign"
 
+- name: core install script
+  ansible.builtin.lineinfile:
+    path: /var/www/html/{{ item }}.sh
+    line: coreos-installer install /dev/sda -I http://{{ bastion.ip}}:8080/{{item}}.ign --insecure-ignition -n
+    create: true
+  loop:
+  - bootstrap
+  - master
+  - worker
+
 - name: Granted read permission for httpd files
   ansible.builtin.file:
     path: /var/www/html
     state: directory
     recurse: yes
-    mode: 0644
-  notify:
-  - restart httpd
+    mode: u=rw,g=r,o=rX
+

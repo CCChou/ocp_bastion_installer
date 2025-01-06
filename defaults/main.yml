@@ -1,45 +1,58 @@
 ---
-firewalld_disable: false
+online: true
+firewalld_disable: true
 selinux_disable: true
 
 # DNS
 dns_configure: true
-dns_upstream: 168.95.1.1
+interface: ens33
+dns_upstream: 8.8.8.8
 dns_check: true
-dns_ip: 127.0.0.1
+dns_ip: 172.20.11.50
 
 # LB
 haproxy_configure: true
 
 # Registry
-registry_configure: true
-mirrorRegistryDir: /root/mirror-registry-amd64.tar.gz
+registry_configure: false
+mirrorRegistryDir: /root/install_source/mirror-registry.tar.gz
+ # for online install
+quayRoot: /mirror-registry
+quayStorage: /mirror-registry/storage
 registryPassword: P@ssw0rd
 
 # OCP
 clusterName: ocp4
-baseDomain: rhtw.com
-pullSecretDir: /root/pull-secret.txt
+baseDomain: demo.lab
+pullSecretDir: /root/install_source/pull-secret.txt
 sshKeyDir: /root/.ssh/id_rsa.pub 
-ocpInstallDir: /root/openshift-install-linux.tar.gz
-ocpClientDir: /root/openshift-client-linux.tar.gz
+ocpInstallDir: /root/install_source/openshift-install-rhel9-amd64.tar.gz
+ocpClientDir: /root/install_source/openshift-client-linux-amd64-rhel9-4.16.26.tar.gz
+
+# Mirroring from disk to mirror
+mirror: false
+ocmirrorSource: /root/install_source/oc-mirror.rhel9.tar.gz
+imageSetFile: /root/install_source
+reponame: ocp416
 
 # Nodes
 bastion:
   name: bastion
-  ip: 10.9.42.31
+  ip: 172.20.11.50
 bootstrap:
   name: bootstrap
-  ip: 10.9.42.32
+  ip: 172.20.11.59
 master:
 - name: master01
-  ip: 10.9.42.33
+  ip: 172.20.11.51
 - name: master02
-  ip: 10.9.42.34
+  ip: 172.20.11.52
 - name: master03
-  ip: 10.9.42.35
+  ip: 172.20.11.53
 worker: 
 - name: worker01
-  ip: 10.9.42.36
+  ip: 172.20.11.54
 - name: worker02
-  ip: 10.9.42.37
+  ip: 172.20.11.55
+- name: worker03
+  ip: 172.20.11.56

@@ -16,6 +16,9 @@
 - name: Check DNS records
   include_tasks: dnscheck.yml
   when: dns_check
+  args:
+    apply:
+        delegate_to: 127.0.0.1
 
 - name: Setup loadbalancer
   include_tasks: haproxy.yml
@@ -31,3 +34,7 @@
 
 - name: Setup OCP files
   include_tasks: ocp.yml
+
+- name: Mirroring from disk to mirror
+  include_tasks: mirroring-from-disk-to-mirror.yml
+  when: mirror

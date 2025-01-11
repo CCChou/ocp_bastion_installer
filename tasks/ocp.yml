@@ -14,6 +14,8 @@
     path: /etc/httpd/conf/httpd.conf
     regexp: "^Listen"
     line: "Listen 8080"
+  notify:
+  - restart httpd
 
 - name: Check ocp install cli exists
   ansible.builtin.stat:
@@ -93,7 +95,7 @@
 - name: Copy install dir
   ansible.builtin.copy:
     src: /root/ocp4/
-    dest: /root/ocp4-install
+    dest: /root/ocp4-backup
 
 - name: Generate manifests
   ansible.builtin.command: openshift-install create manifests --dir=/root/ocp4

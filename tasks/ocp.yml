@@ -17,6 +17,9 @@
   notify:
   - restart httpd
 
+- name: Force httpd service restart for httpd check tasks
+  ansible.builtin.meta: flush_handlers
+
 - name: Check ocp install cli exists
   ansible.builtin.stat:
     path: /usr/bin/openshift-install

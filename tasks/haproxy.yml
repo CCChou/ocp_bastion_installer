@@ -10,3 +10,5 @@
     dest: /etc/haproxy/haproxy.cfg
   notify:
   - restart haproxy
+- name: Force haproxy service restart for haproxy check tasks
+  ansible.builtin.meta: flush_handlers

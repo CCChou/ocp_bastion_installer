@@ -1,18 +1,23 @@
+domain={{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}/24,local
 #server={{ dns_upstream }}
 
 host-record={{ bastion.name }}.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 host-record={{ bootstrap.name }}.{{ clusterName }}.{{ baseDomain }},{{ bootstrap.ip }}
-{% for node in master %}
+{%- for node in master +%}
 host-record={{ node.name }}.{{ clusterName }}.{{ baseDomain }},{{ node.ip }}
-{% endfor %}
-{% if infra is defined %}
-{% for node in infra %}
+{%- endfor %}
+{%- if mode != 'compact' %}
+  {%- if infra is defined %}
+    {%- for node in infra +%}
 host-record={{ node.name }}.{{ clusterName }}.{{ baseDomain }},{{ node.ip }}
-{% endfor %}
-{% endif %}
-{% for node in worker %}
+    {%- endfor %}
+  {%- endif %}
+  {%- if worker is defined %}
+    {%- for node in worker +%}
 host-record={{ node.name }}.{{ clusterName }}.{{ baseDomain }},{{ node.ip }}
-{% endfor %}
+    {%- endfor %}
+  {%- endif %}
+{%- endif +%}
 
 host-record=api.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 host-record=api-int.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
@@ -21,17 +26,21 @@ host-record=.apps.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 
 #address=/{{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}/{{ bastion.ip }}
 #address=/{{ bootstrap.name }}.{{ clusterName }}.{{ baseDomain }}/{{ bootstrap.ip }}
-{% for node in master %}
+{%- for node in master +%}
 #address=/{{ node.name }}.{{ clusterName }}.{{ baseDomain }}/{{ node.ip }}
-{% endfor %}
-{% if infra is defined %}
-{% for node in infra %}
+{%- endfor %}
+{%- if mode != 'compact' %}
+  {%- if infra is defined %}
+    {%- for node in infra +%}
 #address=/{{ node.name }}.{{ clusterName }}.{{ baseDomain }}/{{ node.ip }}
-{% endfor %}
-{% endif %}
-{% for node in worker %}
+    {%- endfor %}
+  {%- endif %}
+  {%- if worker is defined %}
+    {%- for node in worker +%}
 #address=/{{ node.name }}.{{ clusterName }}.{{ baseDomain }}/{{ node.ip }}
-{% endfor %}
+    {%- endfor %}
+  {%- endif %}
+{%- endif +%}
 
 #address=/*.apps.{{ clusterName }}.{{ baseDomain }}/{{ bastion.ip }}
 address=/.apps.{{ clusterName }}.{{ baseDomain }}/{{ bastion.ip }}

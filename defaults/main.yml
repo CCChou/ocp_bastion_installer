@@ -1,6 +1,10 @@
 ---
 # enable or disable
-online: true
+online: false
+
+# compact or standard mode
+mode: standard
+
 firewalld_disable: true
 selinux_disable: true
 
@@ -55,6 +59,7 @@ master:
   ip: 172.20.11.52
 - name: master03
   ip: 172.20.11.53
+# standard mode nodes
 infra:
 - name: infra01
   ip: 172.20.11.54
@@ -62,7 +67,7 @@ infra:
   ip: 172.20.11.55
 - name: infra03
   ip: 172.20.11.56
-worker: 
+worker:
 - name: worker01
   ip: 172.20.11.57
 - name: worker02

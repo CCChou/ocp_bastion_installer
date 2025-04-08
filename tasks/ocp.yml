@@ -108,6 +108,7 @@
     path: /root/ocp4/manifests/cluster-scheduler-02-config.yml
     regexp: "^[\\s]*mastersSchedulable"
     line: "  mastersSchedulable: false"
+  when: mode != 'compact'
 
 - name: Generate ignition files
   ansible.builtin.command: openshift-install create ignition-configs --dir=/root/ocp4

@@ -24,7 +24,6 @@ listen api-server-6443
   option  httpchk GET /readyz HTTP/1.0
   option  log-health-checks
   balance roundrobin
-
   server {{ bootstrap.name }} {{ bootstrap.ip }}:6443 verify none check check-ssl inter 10s fall 2 rise 3 backup 
 {% for node in master %}
   server {{ node.name }} {{ node.ip }}:6443 weight 1 verify none check check-ssl inter 10s fall 2 rise 3
@@ -36,14 +35,33 @@ listen machine-config-server-22623
 {% for node in master %}
   server {{ node.name }} {{ node.ip }}:22623 check inter 1s
 {% endfor %}
+
+{%- if mode == 'compact' %}
+listen ingress-router-443
+  bind *:443
+  mode tcp
+  balance source
+{% for node in master %}
+  server {{ node.name }} {{ node.ip }}:443 check inter 1s
+{% endfor -%}
+
+listen ingress-router-80
+  bind *:80
+  mode tcp
+  balance source
+{% for node in master %}
+  server {{ node.name }} {{ node.ip }}:80 check inter 1s
+{% endfor %}
+
+{%- elif infra is defined %}
 listen ingress-router-443 
   bind *:443
   mode tcp
   balance source
-{% if infra is defined %}
 {% for node in infra %}
   server {{ node.name }} {{ node.ip }}:443 check inter 1s
-{% endfor %}
+{% endfor -%}
+
 listen ingress-router-80
   bind *:80
   mode tcp
@@ -51,10 +69,16 @@ listen ingress-router-80
 {% for node in infra %}
   server {{ node.name }} {{ node.ip }}:80 check inter 1s
 {% endfor %}
-{% else %}
+
+{%- else %}
+listen ingress-router-443 
+  bind *:443
+  mode tcp
+  balance source
 {% for node in worker %}
   server {{ node.name }} {{ node.ip }}:443 check inter 1s
-{% endfor %}
+{% endfor -%}
+
 listen ingress-router-80
   bind *:80
   mode tcp
@@ -62,4 +86,5 @@ listen ingress-router-80
 {% for node in worker %}
   server {{ node.name }} {{ node.ip }}:80 check inter 1s
 {% endfor %}
-{% endif %}
+
+{%- endif %}

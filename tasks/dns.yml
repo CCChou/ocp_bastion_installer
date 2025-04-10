@@ -26,7 +26,7 @@
     enabled: true
 
 - name: Manage DNS in NetworkManager
-  ansible.builtin.command: "nmcli connection modify ens33 ipv4.dns {{ bastion.ip }}"
+  ansible.builtin.command: "nmcli connection modify {{ interface }} ipv4.dns {{ bastion.ip }}"
   notify:
   - restart NetworkManager
     #- name: update 

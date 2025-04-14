@@ -97,6 +97,7 @@
 
 - name: Copy install dir
   ansible.builtin.copy:
+    remote_src: true
     src: /root/ocp4/
     dest: /root/ocp4-backup
 
@@ -115,6 +116,7 @@
 
 - name: Copy the ignition files
   ansible.builtin.copy:
+    remote_src: true
     src: "{{ item }}"
     dest: /var/www/html
   with_fileglob:

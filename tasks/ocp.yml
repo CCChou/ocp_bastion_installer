@@ -27,6 +27,7 @@
 
 - name: Extract ocp install cli
   ansible.builtin.unarchive:
+    remote_src: true
     src: "{{ ocpInstallDir }}"
     dest: /usr/bin/
     list_files: true
@@ -54,6 +55,7 @@
 
 - name: Extract ocp client cli
   ansible.builtin.unarchive:
+    remote_src: true
     src: "{{ ocpClientDir }}"
     dest: /usr/bin/
   when: client_cli.stat.exists == False

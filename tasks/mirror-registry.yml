@@ -19,6 +19,7 @@
 
 - name: Unarchive mirror registry
   ansible.builtin.unarchive:
+    remote_src: true
     src: "{{ mirrorRegistryDir }}"
     dest: "."
     mode: "u+x"

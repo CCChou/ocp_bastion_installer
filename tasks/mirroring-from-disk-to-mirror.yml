@@ -3,6 +3,7 @@
 #oc-mirror --from ./mirror_seq1_000000.tar docker://quay.ocp.exmple.com:8443/ocp416
 - name: Unarchive oc mirror 
   ansible.builtin.unarchive:
+    remote_src: true
     src: "{{ ocmirrorSource }}"
     dest: /usr/bin
     mode: "u+x"

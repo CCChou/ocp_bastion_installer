@@ -17,6 +17,11 @@
     msg: "Mirror Registry already installed or port is already used by other service"
   when: not result.failed
 
+- name: Initiating mental GC cycle (10-minute break protocol)
+  ansible.builtin.debug:
+    msg: "Time for a 10-minute break—go garbage collect your brain memory."
+  when: result.failed
+
 - name: Unarchive mirror registry
   ansible.builtin.unarchive:
     remote_src: true

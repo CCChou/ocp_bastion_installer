@@ -12,6 +12,9 @@
   ansible.builtin.command:
     cmd: podman login {{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}:8443 -uinit -p{{ registryPassword }}
 
+- name: Initiate brain defrag and coffee refill sequence
+  ansible.builtin.debug:
+    msg: "One-hour downtime initiated. Time to defrag your brain and recharge your coffee levels."
 
 - name: Mirroing from disk to mirror
   ansible.builtin.command:

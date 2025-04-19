@@ -14,16 +14,16 @@
 
 - name: Initiate brain defrag and coffee refill sequence
   ansible.builtin.debug:
-    msg: |
-      One-hour downtime initiated. Time to defrag your brain and recharge your coffee levels.
-
-           ( ( 
-            ) )
-         ........
-         |      |]
-         \      /
-          `----'
-       ~ Coffee Time ~
+    msg:
+      - " One-hour downtime initiated. Time to defrag your brain and recharge your coffee levels. "
+      - "                    "
+      - "        ( (         "
+      - "         ) )        "
+      - "      ........      "
+      - "      |      |]     "
+      - "      \       /      "
+      - "       `----'       "
+      - "  ~ Coffee Time ~   "
 
 
 - name: Mirroing from disk to mirror

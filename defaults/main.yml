@@ -21,7 +21,7 @@ dns_ip: 172.20.11.50
 haproxy_configure: true
 
 # Registry
-registry_configure: false
+registry_configure: true
 mirrorRegistryDir: /root/install_source/mirror-registry.tar.gz
 quayRoot: /mirror-registry
 quayStorage: /mirror-registry/storage
@@ -40,7 +40,7 @@ ocpClientDir: /root/install_source/openshift-client-linux-amd64-rhel9-4.16.26.ta
 pullSecretDir: /root/install_source/pull-secret.txt
 
 # Mirroring from disk to mirror
-mirror: false
+mirror: true
 ocmirrorSource: /root/install_source/oc-mirror.rhel9.tar.gz
 imageSetFile: /root/install_source
 reponame: ocp416

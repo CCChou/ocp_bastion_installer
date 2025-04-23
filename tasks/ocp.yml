@@ -124,27 +124,27 @@
   with_fileglob:
   - "/root/ocp4/*.ign"
 
-  - name: Create install.sh script
-    copy:
-      dest: /var/www/html/install.sh
-      mode: '0755'
-      content: |
-        #!/bin/bash
+- name: Create install.sh script
+  copy:
+    dest: /var/www/html/install.sh
+    mode: '0755'
+    content: |
+      #!/bin/bash
 
-        # curl http://['bastion ip']:8080/install.sh | bash -s - /dev/sda worker
+      # curl http://['bastion ip']:8080/install.sh | bash -s - /dev/sda worker
 
-        DEVICE="$1"
-        ROLE="$2"
+      DEVICE="$1"
+      ROLE="$2"
 
-        if [ -z "$DEVICE" ] || [ -z "$ROLE" ]; then
-          echo "Usage: $0 <device> <role>"
-          exit 1
-        fi
+      if [ -z "$DEVICE" ] || [ -z "$ROLE" ]; then
+        echo "Usage: $0 <device> <role>"
+        exit 1
+      fi
 
-        echo "Installing CoreOS to $DEVICE using role $ROLE..."
-        coreos-installer install "$DEVICE" \
-          -I http://{{ bastion.ip }}:8080/${ROLE}.ign \
-          --insecure-ignition -n
+      echo "Installing CoreOS to $DEVICE using role $ROLE..."
+      coreos-installer install "$DEVICE" \
+        -I http://{{ bastion.ip }}:8080/${ROLE}.ign \
+        --insecure-ignition -n
 
 - name: Granted read permission for httpd files
   ansible.builtin.file:

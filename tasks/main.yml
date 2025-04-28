@@ -26,6 +26,10 @@
 
 # - name: "check lb settings"
 
+- name: Setup NTP Server
+  include_tasks: ntp-server.yml
+#  when: ntp_server_configure
+
 - name: Setup mirror registry
   include_tasks: mirror-registry.yml
   when: registry_configure 
@@ -34,6 +38,7 @@
 
 - name: Setup OCP files
   include_tasks: ocp.yml
+  when: ocp_configure
 
 - name: Mirroring from disk to mirror
   include_tasks: mirroring-from-disk-to-mirror.yml

@@ -102,10 +102,27 @@
     remote_src: true
     src: /root/ocp4/
     dest: /root/ocp4-backup
+    mode: preserve
 
 - name: Generate manifests
   ansible.builtin.command: openshift-install create manifests --dir=/root/ocp4
 
+#/root/install_source/butane-amd64 99-worker-chrony.bu -o 99-worker-chrony.yaml
+#- name: Add chrony machineConfig
+#  ansible.builtin.copy:
+#    remote_src: yes
+#    src: "^[\\s]*mastersSchedulable"
+#    dest: /root/ocp4/openshift/99-master-chrony.yaml
+#    line: "  mastersSchedulable: false"
+#
+#- name: Add chrony machineConfig
+#  ansible.builtin.copy:
+#    remote_src: yes
+#    src: "^[\\s]*mastersSchedulable"
+#    dest: /root/ocp4/openshift/99-worker-chrony.yaml
+#    line: "  mastersSchedulable: false"
+#  when: mode != 'compact'
+  
 - name: Modify scheduler config
   ansible.builtin.lineinfile:
     path: /root/ocp4/manifests/cluster-scheduler-02-config.yml
@@ -116,16 +133,34 @@
 - name: Generate ignition files
   ansible.builtin.command: openshift-install create ignition-configs --dir=/root/ocp4
 
-- name: Copy the ignition files
+- name: Find old ignition files
+  ansible.builtin.find:
+    paths: /var/www/html
+    patterns: '*.ign'
+  register: old_ign_files
+
+- name: Remove old ignition files
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ old_ign_files.files }}"
+
+- name: Find all .ign files in /root/ocp4
+  ansible.builtin.find:
+    paths: /root/ocp4
+    patterns: '*.ign'
+  register: ign_files
+
+- name: Copy .ign files to /var/www/html
   ansible.builtin.copy:
-    remote_src: true
-    src: "{{ item }}"
-    dest: /var/www/html
-  with_fileglob:
-  - "/root/ocp4/*.ign"
+    src: "{{ item.path }}"
+    dest: "/var/www/html/{{ item.path | basename }}"
+    remote_src: yes
+    mode: preserve
+  loop: "{{ ign_files.files }}"
 
 - name: Create install.sh script
-  copy:
+  ansible.builtin.copy:
     dest: /var/www/html/install.sh
     mode: '0755'
     content: |

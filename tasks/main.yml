@@ -28,7 +28,7 @@
 
 - name: Setup NTP Server
   include_tasks: ntp-server.yml
-#  when: ntp_server_configure
+  when: ntp_server_configure
 
 - name: Setup mirror registry
   include_tasks: mirror-registry.yml

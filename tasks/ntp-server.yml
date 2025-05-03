@@ -7,7 +7,7 @@
 
 - name: Modify chronyd configuration
   ansible.builtin.template:
-    src: chront.j2
+    src: chrony.j2
     dest: /etc/chrony.conf
 
 - name: Start chronyd

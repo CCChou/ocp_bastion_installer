@@ -43,7 +43,13 @@ Role Variables
     quayStorage: /mirror-registry/storage
     registryPassword: P@ssw0rd
 
+    # NTP server
+    ntp_server_configure: true
+    # NTP client
+    ntp_server_ip: 172.20.11.50
+    
     # OCP
+    ocp_configure: true
     # define the cluster name for cluster
     clusterName: ocp4
     # define the base domain for cluster
@@ -58,7 +64,7 @@ Role Variables
     # Mirroring from disk to mirror
     mirror: false
     ocmirrorSource: /root/install_source/oc-mirror.rhel9.tar.gz
-    imageSetFile: /root/install_source
+    imageSetFile: /root/install_source/mirror
     reponame: ocp416
 
     # Nodes

@@ -60,6 +60,9 @@
     dest: /usr/bin/
   when: client_cli.stat.exists == False
 
+- name: Bash completion for oc command
+  ansible.builtin.shell: "oc completion bash > /etc/bash_completion.d/oc_bash_completion"
+
 - name: Check install dir exists
   ansible.builtin.stat:
     path: /root/ocp4

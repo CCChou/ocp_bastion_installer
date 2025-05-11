@@ -30,7 +30,9 @@ registryPassword: P@ssw0rd
 # NTP server
 ntp_server_configure: true
 # NTP client
+ntp_client_configure: true
 ntp_server_ip: 172.20.11.50
+butaneDir: /root/install_source/
 
 # OCP
 ocp_configure: true

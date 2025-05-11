@@ -34,7 +34,11 @@
   include_tasks: mirror-registry.yml
   when: registry_configure 
 
-# - name: "import ocp images to mirror registry"
+- name: Install Packages
+  include_tasks: packages.yml
+
+- name: Install clis
+  include_tasks: setup-cli.yml
 
 - name: Setup OCP files
   include_tasks: ocp.yml

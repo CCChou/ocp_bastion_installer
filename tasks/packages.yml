@@ -1,3 +1,4 @@
+---
 - name: Install net-tools
   ansible.builtin.yum:
     name: net-tools
@@ -16,10 +17,10 @@
 - name: Modify httpd configuration
   ansible.builtin.lineinfile:
     path: /etc/httpd/conf/httpd.conf
-    regexp: "^Listen"
-    line: "Listen 8080"
+    regexp: ^Listen
+    line: Listen 8080
   notify:
-  - restart httpd
+    - restart httpd
 
 - name: Force httpd service restart for httpd check tasks
   ansible.builtin.meta: flush_handlers

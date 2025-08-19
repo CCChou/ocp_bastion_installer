@@ -1,3 +1,4 @@
+---
 - name: Disable selinux
   ansible.posix.selinux:
     policy: targeted

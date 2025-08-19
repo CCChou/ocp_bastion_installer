@@ -1,3 +1,4 @@
+---
 - name: Check bastion record
   ansible.builtin.debug:
     msg: "{{ lookup('community.general.dig', bastion.name ~ '.' ~ clusterName ~ '.' ~ baseDomain, '@' ~ dns_ip) }}"
@@ -37,32 +38,30 @@
       - "Infra: {{ infra_records.results | map(attribute='msg') | list if mode != 'compact' and infra_records is defined else 'N/A' }}"
       - "Worker: {{ worker_records.results | map(attribute='msg') | list if mode != 'compact' and worker_records is defined else 'N/A' }}"
 
-
 - name: Fail if bastion record incorrect
   ansible.builtin.fail:
-    msg: "Incorrect bastion record"
+    msg: Incorrect bastion record
   when: bastion.ip != bastion_records.msg
 
 - name: Fail if bootstrap record incorrect
   ansible.builtin.fail:
-    msg: "Incorrect bootstrap record"
+    msg: Incorrect bootstrap record
   when: bootstrap.ip != bootstrap_records.msg
 
 - name: Fail if master record incorrect
   ansible.builtin.fail:
-    msg: "Incorrect master record"
+    msg: Incorrect master record
   loop: "{{ master_records.results }}"
   when: item.item.ip != item.msg
 
 - name: Fail if infra record incorrect
   ansible.builtin.fail:
-    msg: "Incorrect infra record"
+    msg: Incorrect infra record
   loop: "{{ infra_records.results | default([]) }}"
   when: mode != 'compact' and item.item.ip != item.msg
 
 - name: Fail if worker record incorrect
   ansible.builtin.fail:
-    msg: "Incorrect worker record"
+    msg: Incorrect worker record
   loop: "{{ worker_records.results | default([]) }}"
   when: mode != 'compact' and item.item.ip != item.msg
-

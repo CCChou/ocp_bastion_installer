@@ -1,9 +1,4 @@
 domain={{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}/24,local
-{% if online == true  %}
-server={{ dns_upstream }}
-{% else %}
-#server={{ dns_upstream }}
-{% endif %}
 
 host-record={{ bastion.name }}.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 host-record={{ bootstrap.name }}.{{ clusterName }}.{{ baseDomain }},{{ bootstrap.ip }}

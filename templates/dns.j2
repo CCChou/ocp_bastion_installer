@@ -1,4 +1,5 @@
 domain={{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}/24,local
+server={{ dns_upstream }}
 
 host-record={{ bastion.name }}.{{ clusterName }}.{{ baseDomain }},{{ bastion.ip }}
 host-record={{ bootstrap.name }}.{{ clusterName }}.{{ baseDomain }},{{ bootstrap.ip }}

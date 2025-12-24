@@ -61,24 +61,24 @@ bootstrap:
   name: bootstrap
   ip: 172.20.11.60
 master:
-- name: master01
-  ip: 172.20.11.51
-- name: master02
-  ip: 172.20.11.52
-- name: master03
-  ip: 172.20.11.53
+  - name: master01
+    ip: 172.20.11.51
+  - name: master02
+    ip: 172.20.11.52
+  - name: master03
+    ip: 172.20.11.53
 # standard mode nodes
 infra:
-- name: infra01
-  ip: 172.20.11.54
-- name: infra02
-  ip: 172.20.11.55
-- name: infra03
-  ip: 172.20.11.56
+  - name: infra01
+    ip: 172.20.11.54
+  - name: infra02
+    ip: 172.20.11.55
+  - name: infra03
+    ip: 172.20.11.56
 worker:
-- name: worker01
-  ip: 172.20.11.57
-- name: worker02
-  ip: 172.20.11.58
-- name: worker03
-  ip: 172.20.11.59
+  - name: worker01
+    ip: 172.20.11.57
+  - name: worker02
+    ip: 172.20.11.58
+  - name: worker03
+    ip: 172.20.11.59

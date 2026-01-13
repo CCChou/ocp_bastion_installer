@@ -25,7 +25,7 @@ pullSecret: '{"auths":{"{{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}:84
 sshKey: '{{ sshkey.stdout }}'
 additionalTrustBundle: |
 {{ (mirrorRegistryCA['content'] | b64decode) | indent(width=2,first=True) }}
-imageContentSources:
+imageDigestSources:
 - mirrors:
   - {{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}:8443/{{ reponame }}/openshift/release
   source: quay.io/openshift-release-dev/ocp-v4.0-art-dev

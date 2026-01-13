@@ -48,24 +48,32 @@
   ansible.builtin.command: openshift-install create manifests --dir=/root/ocp4
 
 - name: Add master chrony machineConfig
-  when: ntp_client_configure
+  when: 
+    - ntp_client_configure
+    - ntp_server_ip is defined
+    - ntp_server_ip | length > 0
   block:
     - name: Create master Butane config
       ansible.builtin.template:
         src: 99-master-chrony.bu.j2
-        dest: /root/ocp4-backup/99-master-chrony.yaml
+        dest: /root/ocp4-backup/99-master-chrony.bu
     - name: Generate master MachineConfig object file
-      ansible.builtin.command: butane /root/ocp4-backup/99-master-chrony.yaml -o /root/ocp4/openshift/99-master-chrony.yaml
+      ansible.builtin.command: butane /root/ocp4-backup/99-master-chrony.bu -o /root/ocp4/openshift/99-master-chrony.yaml
+
 
 - name: Add worker chrony machineConfig
-  when: ntp_client_configure and mode != 'compact'
+  when: 
+    - ntp_server_ip is defined
+    - ntp_server_ip | length > 0
+    - ntp_client_configure
+    - mode != 'compact'
   block:
     - name: Create worker Butane config
       ansible.builtin.template:
         src: 99-worker-chrony.bu.j2
-        dest: /root/ocp4-backup/99-worker-chrony.yaml
+        dest: /root/ocp4-backup/99-worker-chrony.bu
     - name: Generate worker MachineConfig object file
-      ansible.builtin.command: butane /root/ocp4-backup/99-worker-chrony.yaml -o /root/ocp4/openshift/99-worker-chrony.yaml
+      ansible.builtin.command: butane /root/ocp4-backup/99-worker-chrony.bu -o /root/ocp4/openshift/99-worker-chrony.yaml
   
 - name: Modify scheduler config
   ansible.builtin.lineinfile:

@@ -28,5 +28,5 @@
 
 - name: Mirroing from disk to mirror
   ansible.builtin.command:
-    cmd: oc-mirror --from {{ imageSetFile }} docker://{{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}:8443/{{ reponame }}
+    cmd: oc mirror -c {{ imageSetFile }}/imageset-config.yaml --from file://{{ imageSetFile }} docker://{{ bastion.name }}.{{ clusterName }}.{{ baseDomain }}:8443/{{ reponame }} --workspace /root/mirror-workspace --cache-dir /root/mirror-cache --v2
 

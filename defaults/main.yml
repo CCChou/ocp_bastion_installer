@@ -5,10 +5,11 @@ online: false
 # compact or standard mode
 mode: standard
 
+# 依個人需求啟動或關閉防火牆與 SELinux 等服務與功能
 firewalld_disable: true
 selinux_disable: true
 
-# DNS
+# 啟用或停用 DNS配置、網卡(NIC)名稱、DNS 上游伺服器位址
 dns_configure: true
 interface: ens33
 dns_upstream: 8.8.8.8
@@ -17,12 +18,12 @@ dns_upstream: 8.8.8.8
 dns_check: true
 dns_ip: 172.20.11.50
 
-# LB
+# 是否啟用負載平衡配置
 haproxy_configure: true
 
-# Registry
+# 鏡像庫配置
 registry_configure: true
-mirrorRegistryDir: /root/install_source/mirror-registry.tar.gz
+mirrorRegistryDir: /root/install_source/mirror-registry-amd64.tar.gz
 quayRoot: /mirror-registry
 quayStorage: /mirror-registry/storage
 registryPassword: P@ssw0rd
@@ -34,26 +35,26 @@ ntp_client_configure: true
 ntp_server_ip: 172.20.11.50
 butaneDir: /root/install_source/butane-amd64
 
-# OCP
+# OCP 相關配置
 ocp_configure: true
-# define the cluster name for cluster
+# 定義叢集名稱
 clusterName: ocp4
-# define the base domain for cluster
+# 定義叢集基礎域名
 baseDomain: demo.lab
-# define the resource files absolute path
+# 定義資源檔案之絕對路徑: 如公鑰、OCP 所需指令壓縮檔位置等
 sshKeyDir: /root/.ssh/id_rsa.pub
 ocpInstallDir: /root/install_source/openshift-install-rhel9-amd64.tar.gz
-ocpClientDir: /root/install_source/openshift-client-linux-amd64-rhel9-4.16.26.tar.gz
-# for online install
+ocpClientDir: /root/install_source/openshift-client-linux-amd64-rhel9-4.20.8.tar.gz
+# 連線安裝所需之 pull-secret 位置
 pullSecretDir: /root/install_source/pull-secret.txt
 
-# Mirroring from disk to mirror
+# 從磁碟到鏡像的同步
 mirror: true
 ocmirrorSource: /root/install_source/oc-mirror.rhel9.tar.gz
-imageSetFile: /root/install_source
-reponame: ocp416
+imageSetFile: /root/install_source/mirror
+reponame: ocp420
 
-# Nodes
+# 節點的基本設定 (將不需要的節點註解掉)
 bastion:
   name: bastion
   ip: 172.20.11.50
